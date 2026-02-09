@@ -32,12 +32,11 @@ public static class ListVersionsCommand
 
                 Console.WriteLine();
                 Console.WriteLine($"Total: {versions.Count} version(s)");
-                Console.WriteLine();
-                Console.WriteLine("Usage: netex-generate generate --version <version>");
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Error fetching versions: {ex.Message}");
+                Environment.ExitCode = 1;
             }
         });
 

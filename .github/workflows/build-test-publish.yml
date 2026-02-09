@@ -1,0 +1,88 @@
+name: build, test, and publish
+
+on:
+  workflow_call:
+    inputs:
+      should-package:
+        type: boolean
+        default: false
+      should-run:
+        type: string
+        default: 'true'
+
+jobs:
+  build-test-publish:
+    if: inputs.should-run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # required for MinVer
+
+      - name: setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: src/Directory.Packages.props
+
+      - name: restore packages
+        run: dotnet restore Spillgebees.NeTEx.Models.slnx
+
+      - name: build generator
+        run: dotnet build src/Spillgebees.NeTEx.Generator/Spillgebees.NeTEx.Generator.csproj --configuration Release --no-restore
+
+      - name: generate NeTEx models
+        run: |
+          generate() {
+            local tag=$1
+            local ns_suffix=$2
+            local project_dir="src/Spillgebees.NeTEx.Models.${ns_suffix}"
+            echo "::group::Generating $tag (namespace suffix: $ns_suffix)"
+            dotnet run \
+              --project src/Spillgebees.NeTEx.Generator/Spillgebees.NeTEx.Generator.csproj \
+              --configuration Release \
+              --no-build \
+              -- \
+              generate \
+              --version "$tag" \
+              --output "${project_dir}/Generated" \
+              --namespace "Spillgebees.NeTEx.Models.$ns_suffix" \
+              --verbose
+            echo "::endgroup::"
+          }
+
+          # Clean output directories before generating
+          rm -rf src/Spillgebees.NeTEx.Models.V1_*/Generated
+
+          generate v1.2   V1_2
+          generate v1.2.2 V1_2_2
+          generate v1.2.3 V1_2_3
+          generate v1.3.0 V1_3_0
+          generate v1.3.1 V1_3_1
+
+      - name: build solution
+        run: dotnet build Spillgebees.NeTEx.Models.slnx --configuration Release --no-restore
+
+      - name: test project
+        run: dotnet test --solution Spillgebees.NeTEx.Models.slnx --configuration Release --no-build --verbosity normal
+
+      - name: package NuGet packages
+        if: inputs.should-package
+        run: |
+          dotnet pack src/Spillgebees.NeTEx.Models.V1_2/Spillgebees.NeTEx.Models.V1_2.csproj --configuration Release --no-build --output package
+          dotnet pack src/Spillgebees.NeTEx.Models.V1_2_2/Spillgebees.NeTEx.Models.V1_2_2.csproj --configuration Release --no-build --output package
+          dotnet pack src/Spillgebees.NeTEx.Models.V1_2_3/Spillgebees.NeTEx.Models.V1_2_3.csproj --configuration Release --no-build --output package
+          dotnet pack src/Spillgebees.NeTEx.Models.V1_3_0/Spillgebees.NeTEx.Models.V1_3_0.csproj --configuration Release --no-build --output package
+          dotnet pack src/Spillgebees.NeTEx.Models.V1_3_1/Spillgebees.NeTEx.Models.V1_3_1.csproj --configuration Release --no-build --output package
+          dotnet pack src/Spillgebees.NeTEx.Models/Spillgebees.NeTEx.Models.csproj --configuration Release --no-build --output package
+          dotnet pack src/Spillgebees.NeTEx.Generator/Spillgebees.NeTEx.Generator.csproj --configuration Release --no-build --output package
+
+      - name: upload artifacts
+        if: inputs.should-package
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          if-no-files-found: error
+          retention-days: 1
+          path: package/*.nupkg

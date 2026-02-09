@@ -1,0 +1,35 @@
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-test:
+    uses: ./.github/workflows/build-test-publish.yml
+    with:
+      should-package: true
+
+  publish:
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: global.json
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifacts
+          path: .
+
+      - name: 🚀 publish nuget packages
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json

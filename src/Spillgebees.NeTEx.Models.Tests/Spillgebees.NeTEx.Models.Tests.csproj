@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Spillgebees.NeTEx.Models/Spillgebees.NeTEx.Models.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2/Spillgebees.NeTEx.Models.V1_2.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2_2/Spillgebees.NeTEx.Models.V1_2_2.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2_3/Spillgebees.NeTEx.Models.V1_2_3.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_3_0/Spillgebees.NeTEx.Models.V1_3_0.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_3_1/Spillgebees.NeTEx.Models.V1_3_1.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -38,7 +38,7 @@ csharp_style_var_elsewhere = true:suggestion
 
 # Null check settings
 csharp_style_throw_expression = true:suggestion
-csharp_Style_conditional_delegate_call = true:suggestion
+csharp_style_conditional_delegate_call = true:suggestion
 
 # Newline settings
 csharp_new_line_before_open_brace = all
@@ -121,10 +121,7 @@ csharp_style_prefer_index_operator = false:none
 csharp_style_prefer_range_operator = false:none
 csharp_style_pattern_local_over_anonymous_function = false:none
 
-[*.{xml,config,*proj,nuspec,props,resx,targets,yml,tasks}]
-indent_size = 2
-
-[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
+[*.{xml,config,*proj,nuspec,props,resx,targets,yml,tasks,ruleset,vsixmanifest,vsct}]
 indent_size = 2
 
 [*.json]
@@ -357,7 +354,7 @@ dotnet_naming_style.static_prefix_style.capitalization = camel_case
 dotnet_naming_rule.camel_case_for_private_internal_fields.severity = warning
 dotnet_naming_rule.camel_case_for_private_internal_fields.symbols  = private_internal_fields
 dotnet_naming_rule.camel_case_for_private_internal_fields.style    = camel_case_underscore_style
-dotnet_naming_symbols.private_internal_fields.applicable_kinds = field, property
+dotnet_naming_symbols.private_internal_fields.applicable_kinds = field
 dotnet_naming_symbols.private_internal_fields.applicable_accessibilities = private, internal, private_protected
 dotnet_naming_style.camel_case_underscore_style.required_prefix = _
 dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case

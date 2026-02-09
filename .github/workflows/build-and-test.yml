@@ -1,0 +1,39 @@
+name: build and test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      changed: ${{ steps.filter.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🔎 checking for changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            changed:
+              - 'src/Spillgebees.NeTEx.Generator/**'
+              - 'src/Spillgebees.NeTEx.Models*/**'
+              - 'src/General.targets'
+              - 'src/Models.targets'
+              - 'src/Directory.Packages.props'
+              - 'global.json'
+              - 'Spillgebees.NeTEx.Models.slnx'
+
+  build-and-test:
+    needs: [changes]
+    uses: ./.github/workflows/build-test-publish.yml
+    with:
+      should-run: ${{ needs.changes.outputs.changed }}

@@ -27,7 +27,7 @@ public static class GenerateCommand
 
         var namespaceOption = new Option<string>("--namespace", "-n")
         {
-            Description = "Root C# namespace. Sub-namespaces .Netex, .Siri, .Gml are appended automatically.",
+            Description = "Root C# namespace. Sub-namespaces .NeTEx, .SIRI, .GML are appended automatically.",
             DefaultValueFactory = _ => GeneratorDefaults.DefaultNamespace,
         };
 
@@ -60,6 +60,15 @@ public static class GenerateCommand
             var clean = parseResult.GetValue(cleanOption);
             var verbose = parseResult.GetValue(verboseOption);
 
+            // --version and --ref are mutually exclusive
+            if (gitRef is not null && parseResult.GetResult(versionOption) is { } versionResult
+                && versionResult.Tokens.Count > 0)
+            {
+                Console.Error.WriteLine("Error: --version and --ref are mutually exclusive. Specify only one.");
+                Environment.ExitCode = 1;
+                return;
+            }
+
             Action<string>? log = verbose ? Console.WriteLine : null;
 
             var isTag = gitRef is null;
@@ -70,22 +79,36 @@ public static class GenerateCommand
                 if (clean && Directory.Exists(output))
                 {
                     log?.Invoke($"Cleaning output directory: {output}");
-                    Directory.Delete(output, recursive: true);
+
+                    try
+                    {
+                        Directory.Delete(output, recursive: true);
+                    }
+                    catch (Exception ex) when (ex is UnauthorizedAccessException or IOException)
+                    {
+                        throw new InvalidOperationException(
+                            $"Failed to clean output directory '{output}': {ex.Message}", ex);
+                    }
                 }
 
-                var xsdDirectory = await SchemaDownloader.DownloadAndExtractAsync(
+                using var schemaDir = await SchemaDownloader.DownloadAndExtractAsync(
                     versionOrRef, isTag, log, cancellationToken);
 
                 log?.Invoke("Generating C# models...");
                 log?.Invoke($"  Output:     {Path.GetFullPath(output)}");
                 log?.Invoke($"  Namespace:  {rootNamespace}");
-                log?.Invoke($"  Sub-namespaces: .Netex, .Siri, .Gml");
+                log?.Invoke($"  Sub-namespaces: .NeTEx, .SIRI, .GML");
 
-                CodeGenerator.Generate(xsdDirectory, output, rootNamespace, verbose);
+                var result = CodeGenerator.Generate(schemaDir.XsdPath, output, rootNamespace, verbose);
 
                 Console.WriteLine($"Successfully generated NeTEx models in {Path.GetFullPath(output)}");
                 Console.WriteLine($"  NeTEx: {rootNamespace}.{GeneratorDefaults.NetexSubNamespace}");
-                Console.WriteLine($"  SIRI:  {rootNamespace}.{GeneratorDefaults.SiriSubNamespace}");
+
+                if (result.SiriGenerated)
+                {
+                    Console.WriteLine($"  SIRI:  {rootNamespace}.{GeneratorDefaults.SiriSubNamespace}");
+                }
+
                 Console.WriteLine($"  GML:   {rootNamespace}.{GeneratorDefaults.GmlSubNamespace}");
             }
             catch (Exception ex)
@@ -95,6 +118,8 @@ public static class GenerateCommand
                 {
                     Console.Error.WriteLine(ex.StackTrace);
                 }
+
+                Environment.ExitCode = 1;
             }
         });
 

@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <!-- NuGet metadata shared across all NeTEx Models packages -->
+    <Authors>Jason Rebelo Neves (igotinfected)</Authors>
+    <Company>Spillgebees</Company>
+    <PackageTags>netex;siri;public-transport;xml;schema;models</PackageTags>
+    <PackageLicenseExpression>EUPL-1.2</PackageLicenseExpression>
+    <PackageIcon>spillgebees.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/Spillgebees/Spillgebees.NeTEx</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Spillgebees/Spillgebees.NeTEx</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../assets/spillgebees.png" Pack="true" PackagePath="" />
+    <None Include="../../README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>
