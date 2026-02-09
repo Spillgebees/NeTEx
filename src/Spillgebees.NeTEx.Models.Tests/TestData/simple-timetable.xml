@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PublicationDelivery xmlns="http://www.netex.org.uk/netex" xmlns:siri="http://www.siri.org.uk/siri" version="1.0">
+  <PublicationTimestamp>2026-02-01T08:00:00</PublicationTimestamp>
+  <ParticipantRef>test-timetable-provider</ParticipantRef>
+  <Description>Simple Timetable example for testing</Description>
+  <dataObjects>
+    <CompositeFrame id="CF:TT:001" version="1">
+      <frames>
+        <ServiceFrame id="SRF:001" version="1">
+          <lines>
+            <Line id="LN:001" version="1">
+              <Name>Bus Line 42</Name>
+              <TransportMode>bus</TransportMode>
+            </Line>
+          </lines>
+        </ServiceFrame>
+      </frames>
+    </CompositeFrame>
+  </dataObjects>
+</PublicationDelivery>

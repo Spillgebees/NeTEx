@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../General.targets" />
+  <Import Project="../Models.targets" />
+
+  <PropertyGroup>
+    <Description>Meta-package that includes pre-generated C# model classes for all official NeTEx (Network Timetable Exchange) schema versions. Install this package to get models for every supported version, or install individual version packages for a smaller footprint.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2/Spillgebees.NeTEx.Models.V1_2.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2_2/Spillgebees.NeTEx.Models.V1_2_2.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2_3/Spillgebees.NeTEx.Models.V1_2_3.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_3_0/Spillgebees.NeTEx.Models.V1_3_0.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_3_1/Spillgebees.NeTEx.Models.V1_3_1.csproj" />
+  </ItemGroup>
+</Project>

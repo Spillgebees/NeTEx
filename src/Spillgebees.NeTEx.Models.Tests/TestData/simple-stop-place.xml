@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PublicationDelivery xmlns="http://www.netex.org.uk/netex" xmlns:siri="http://www.siri.org.uk/siri" version="1.0">
+  <PublicationTimestamp>2026-01-15T10:30:00</PublicationTimestamp>
+  <ParticipantRef>test-participant</ParticipantRef>
+  <Description>Simple Stop Place example for testing</Description>
+  <dataObjects>
+    <CompositeFrame id="CF:001" version="1">
+      <frames>
+        <SiteFrame id="SF:001" version="1">
+          <stopPlaces>
+            <StopPlace id="NSR:StopPlace:1234" version="1">
+              <Name>Central Station</Name>
+              <Centroid>
+                <Location>
+                  <Longitude>10.752245</Longitude>
+                  <Latitude>59.911491</Latitude>
+                </Location>
+              </Centroid>
+              <StopPlaceType>railStation</StopPlaceType>
+            </StopPlace>
+          </stopPlaces>
+        </SiteFrame>
+      </frames>
+    </CompositeFrame>
+  </dataObjects>
+</PublicationDelivery>
