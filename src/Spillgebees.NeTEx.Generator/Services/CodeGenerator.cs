@@ -60,6 +60,9 @@ public static class CodeGenerator
             GenerateCommandLineArgumentsComment = false,
             CreateGeneratedCodeAttributeVersion = false,
 
+            // Enum collections
+            EnumCollection = true,
+
             // Structure
             EmitOrder = true,
             GenerateInterfaces = false,
@@ -67,12 +70,11 @@ public static class CodeGenerator
 
             // Logging
             Log = verbose ? msg => Console.WriteLine($"  [xscgen] {msg}") : null,
+            // Set NamingProvider after the object initializer to avoid being overwritten
+            // by any NamingScheme setter. This renames abstract dummy elements (e.g. 'StopPlace_')
+            // so that concrete elements get the clean C# class name (e.g. 'StopPlace').
+            NamingProvider = new NetexNamingProvider(NamingScheme.PascalCase)
         };
-
-        // Set NamingProvider after the object initializer to avoid being overwritten
-        // by any NamingScheme setter. This renames abstract dummy elements (e.g. 'StopPlace_')
-        // so that concrete elements get the clean C# class name (e.g. 'StopPlace').
-        generator.NamingProvider = new NetexNamingProvider(NamingScheme.PascalCase);
 
         var publicationSchema = Path.Combine(xsdDirectory, GeneratorDefaults.PublicationSchemaFileName);
         var siriSchema = Path.Combine(xsdDirectory, GeneratorDefaults.SiriSchemaFileName);
