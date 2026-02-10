@@ -84,6 +84,68 @@ public class NetexSerializationTests
     }
 
     [Test]
+    public void Should_serialize_and_deserialize_organisation_with_typed_enum_list()
+    {
+        // arrange
+        var serializer = new XmlSerializer(typeof(Organisation));
+        var organisation = new Organisation
+        {
+            Id = "ORG:Operator:1",
+            Version = "1",
+        };
+        organisation.OrganisationType!.Add(OrganisationTypeEnumeration.Operator);
+        organisation.OrganisationType.Add(OrganisationTypeEnumeration.Authority);
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, organisation);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as Organisation;
+
+        // assert
+        xml.Should().Contain("<OrganisationType>operator</OrganisationType>");
+        xml.Should().Contain("<OrganisationType>authority</OrganisationType>");
+
+        deserialized.Should().NotBeNull();
+        deserialized!.OrganisationType.Should().HaveCount(2);
+        deserialized.OrganisationType[0].Should().Be(OrganisationTypeEnumeration.Operator);
+        deserialized.OrganisationType[1].Should().Be(OrganisationTypeEnumeration.Authority);
+    }
+
+    [Test]
+    public void Should_serialize_and_deserialize_parking_with_typed_enum_list()
+    {
+        // arrange
+        var serializer = new XmlSerializer(typeof(Parking));
+        var parking = new Parking
+        {
+            Id = "PRK:Parking:1",
+            Version = "1",
+        };
+        parking.ParkingPaymentProcess!.Add(ParkingPaymentProcessEnumeration.PayAndDisplay);
+        parking.ParkingPaymentProcess.Add(ParkingPaymentProcessEnumeration.PayByMobileDevice);
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, parking);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as Parking;
+
+        // assert
+        xml.Should().Contain("<ParkingPaymentProcess>payAndDisplay</ParkingPaymentProcess>");
+        xml.Should().Contain("<ParkingPaymentProcess>payByMobileDevice</ParkingPaymentProcess>");
+
+        deserialized.Should().NotBeNull();
+        deserialized!.ParkingPaymentProcess.Should().HaveCount(2);
+        deserialized.ParkingPaymentProcess[0].Should().Be(ParkingPaymentProcessEnumeration.PayAndDisplay);
+        deserialized.ParkingPaymentProcess[1].Should().Be(ParkingPaymentProcessEnumeration.PayByMobileDevice);
+    }
+
+    [Test]
     public void Should_have_correct_xml_type_namespace_on_stop_place()
     {
         // act
