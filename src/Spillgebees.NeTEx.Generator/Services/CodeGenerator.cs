@@ -21,12 +21,11 @@ public static class CodeGenerator
         {
             GenerateNamespace = key =>
                 CodeUtilities.GenerateNamespace(key.XmlSchemaNamespace, rootNamespace),
+            [new NamespaceKey(GeneratorDefaults.NetexXmlNamespace)] = netexNamespace,
+            [new NamespaceKey(GeneratorDefaults.SiriXmlNamespace)] = siriNamespace,
+            [new NamespaceKey(GeneratorDefaults.GmlXmlNamespace)] = gmlNamespace,
+            [new NamespaceKey(GeneratorDefaults.W3XmlNamespace)] = w3Namespace
         };
-
-        namespaceProvider[new NamespaceKey(GeneratorDefaults.NetexXmlNamespace)] = netexNamespace;
-        namespaceProvider[new NamespaceKey(GeneratorDefaults.SiriXmlNamespace)] = siriNamespace;
-        namespaceProvider[new NamespaceKey(GeneratorDefaults.GmlXmlNamespace)] = gmlNamespace;
-        namespaceProvider[new NamespaceKey(GeneratorDefaults.W3XmlNamespace)] = w3Namespace;
 
         var generator = new XscGenerator
         {
@@ -51,6 +50,7 @@ public static class CodeGenerator
             // Collections
             CollectionSettersMode = CollectionSettersMode.Init,
             CollectionType = typeof(List<>),
+            EnumCollection = true,
 
             // Minimal attribute noise
             GenerateSerializableAttribute = false,
@@ -59,9 +59,6 @@ public static class CodeGenerator
             GenerateDescriptionAttribute = false,
             GenerateCommandLineArgumentsComment = false,
             CreateGeneratedCodeAttributeVersion = false,
-
-            // Enum collections
-            EnumCollection = true,
 
             // Structure
             EmitOrder = true,
