@@ -27,7 +27,7 @@ public class SiriSerializationTests
 
         // assert
         deserialized.Should().NotBeNull();
-        deserialized!.Longitude.Should().Be(10.752245m);
+        deserialized.Longitude.Should().Be(10.752245m);
         deserialized.Latitude.Should().Be(59.911491m);
     }
 
@@ -52,7 +52,7 @@ public class SiriSerializationTests
 
         // assert
         deserialized.Should().NotBeNull();
-        deserialized!.Value.Should().Be("Test String");
+        deserialized.Value.Should().Be("Test String");
         deserialized.Lang.Should().Be("en");
     }
 
@@ -67,6 +67,6 @@ public class SiriSerializationTests
 
         // assert
         xmlTypeAttr.Should().NotBeNull();
-        xmlTypeAttr!.Namespace.Should().Be("http://www.siri.org.uk/siri");
+        xmlTypeAttr.Namespace.Should().Be("http://www.siri.org.uk/siri");
     }
 }

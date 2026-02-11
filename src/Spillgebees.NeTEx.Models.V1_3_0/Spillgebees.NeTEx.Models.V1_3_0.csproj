@@ -3,6 +3,7 @@
   <Import Project="../Models.targets" />
 
   <PropertyGroup>
-    <Description>Pre-generated C# model classes for NeTEx (Network Timetable Exchange) v1.3.0 and associated SIRI/GML schemas.</Description>
+    <NetexVersion>v1.3.0</NetexVersion>
+    <Description>Pre-generated C# model classes for NeTEx (Network Timetable Exchange) $(NetexVersion) and associated SIRI/GML schemas.</Description>
   </PropertyGroup>
 </Project>

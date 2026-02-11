@@ -415,9 +415,5 @@ fabric.properties
 # Generated NeTEx models (produced at build time by Spillgebees.NeTEx.Generator)
 src/Spillgebees.NeTEx.Models*/Generated/
 
-# TODO: Remove once upstream XmlSchemaClassGenerator PR is merged and released.
-# Temporary patched xscgen package with EnumCollection support.
-!lib/*.nupkg
-
 # OpenCode
 .opencode/

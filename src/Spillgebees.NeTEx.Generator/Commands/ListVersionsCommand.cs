@@ -35,7 +35,7 @@ public static class ListVersionsCommand
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Error fetching versions: {ex.Message}");
+                await Console.Error.WriteLineAsync($"Error fetching versions: {ex.Message}");
                 Environment.ExitCode = 1;
             }
         });

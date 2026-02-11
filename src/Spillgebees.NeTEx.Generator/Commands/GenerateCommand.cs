@@ -60,16 +60,14 @@ public static class GenerateCommand
             var clean = parseResult.GetValue(cleanOption);
             var verbose = parseResult.GetValue(verboseOption);
 
-            // --version and --ref are mutually exclusive
-            if (gitRef is not null && parseResult.GetResult(versionOption) is { } versionResult
-                && versionResult.Tokens.Count > 0)
+            if (gitRef is not null && parseResult.GetResult(versionOption) is { Tokens.Count: > 0 })
             {
-                Console.Error.WriteLine("Error: --version and --ref are mutually exclusive. Specify only one.");
+                await Console.Error.WriteLineAsync("Error: --version and --ref are mutually exclusive. Specify only one.");
                 Environment.ExitCode = 1;
                 return;
             }
 
-            Action<string>? log = verbose ? Console.WriteLine : null;
+            Action<string>? logVerboseLine = verbose ? Console.WriteLine : null;
 
             var isTag = gitRef is null;
             var versionOrRef = gitRef ?? version;
@@ -78,7 +76,7 @@ public static class GenerateCommand
             {
                 if (clean && Directory.Exists(output))
                 {
-                    log?.Invoke($"Cleaning output directory: {output}");
+                    logVerboseLine?.Invoke($"Cleaning output directory: {output}");
 
                     try
                     {
@@ -92,31 +90,32 @@ public static class GenerateCommand
                 }
 
                 using var schemaDir = await SchemaDownloader.DownloadAndExtractAsync(
-                    versionOrRef, isTag, log, cancellationToken);
+                    versionOrRef,
+                    isTag,
+                    logVerboseLine,
+                    cancellationToken);
 
-                log?.Invoke("Generating C# models...");
-                log?.Invoke($"  Output:     {Path.GetFullPath(output)}");
-                log?.Invoke($"  Namespace:  {rootNamespace}");
-                log?.Invoke($"  Sub-namespaces: .NeTEx, .SIRI, .GML");
+                logVerboseLine?.Invoke("Generating C# models...");
+                logVerboseLine?.Invoke($"  Output:     {Path.GetFullPath(output)}");
+                logVerboseLine?.Invoke($"  Namespace:  {rootNamespace}");
+                logVerboseLine?.Invoke("  Sub-namespaces: .NeTEx, .SIRI, .GML");
 
                 var result = CodeGenerator.Generate(schemaDir.XsdPath, output, rootNamespace, verbose);
 
-                Console.WriteLine($"Successfully generated NeTEx models in {Path.GetFullPath(output)}");
-                Console.WriteLine($"  NeTEx: {rootNamespace}.{GeneratorDefaults.NetexSubNamespace}");
-
+                Console.WriteLine($"Generated NeTEx {versionOrRef} models in {Path.GetFullPath(output)}");
+                logVerboseLine?.Invoke($"  NeTEx: {rootNamespace}.{GeneratorDefaults.NetexSubNamespace}");
                 if (result.SiriGenerated)
                 {
-                    Console.WriteLine($"  SIRI:  {rootNamespace}.{GeneratorDefaults.SiriSubNamespace}");
+                    logVerboseLine?.Invoke($"  SIRI:  {rootNamespace}.{GeneratorDefaults.SiriSubNamespace}");
                 }
-
-                Console.WriteLine($"  GML:   {rootNamespace}.{GeneratorDefaults.GmlSubNamespace}");
+                logVerboseLine?.Invoke($"  GML:   {rootNamespace}.{GeneratorDefaults.GmlSubNamespace}");
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Error: {ex.Message}");
+                await Console.Error.WriteLineAsync($"Error: {ex.Message}");
                 if (verbose)
                 {
-                    Console.Error.WriteLine(ex.StackTrace);
+                    await Console.Error.WriteLineAsync(ex.StackTrace);
                 }
 
                 Environment.ExitCode = 1;
