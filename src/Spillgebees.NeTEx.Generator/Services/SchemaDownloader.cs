@@ -13,9 +13,15 @@ public static partial class SchemaDownloader
 {
     private static readonly HttpClient HttpClient = CreateHttpClient();
 
+    private static string CacheRootDirectory =>
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "netex-schemas");
+
     /// <summary>
     /// Downloads and extracts NeTEx schemas from the official NeTEx-CEN GitHub repository.
-    /// The caller is responsible for cleaning up the returned <see cref="SchemaDirectory"/>.
+    /// Tags and commit SHAs are cached locally so repeated builds don't hit GitHub.
+    /// Branch refs are always downloaded fresh since they are mutable.
     /// </summary>
     public static async Task<SchemaDirectory> DownloadAndExtractAsync(
         string versionOrRef,
@@ -23,11 +29,24 @@ public static partial class SchemaDownloader
         Action<string>? log = null,
         CancellationToken cancellationToken = default)
     {
+        // Tags and commit SHAs are immutable — use the local cache if available.
+        var isCacheable = isTag || IsCommitSha(versionOrRef);
+        if (isCacheable)
+        {
+            var cachedXsdDir = Path.Combine(CacheRootDirectory, versionOrRef, "xsd");
+            if (Directory.Exists(cachedXsdDir)
+                && Directory.EnumerateFiles(cachedXsdDir, "*.xsd", SearchOption.AllDirectories).Any())
+            {
+                Console.WriteLine($"Using cached schemas for {versionOrRef}");
+                return new SchemaDirectory(cachedXsdDir, ownsDirectory: false);
+            }
+        }
+
         var url = isTag
             ? string.Format(CultureInfo.InvariantCulture, GeneratorDefaults.GitHubArchiveUrlTemplate, versionOrRef)
             : string.Format(CultureInfo.InvariantCulture, GeneratorDefaults.GitHubArchiveRefUrlTemplate, versionOrRef);
 
-        log?.Invoke($"Downloading schemas from {url}...");
+        Console.WriteLine($"Downloading schemas for {versionOrRef}...");
 
         var tempDir = Path.Combine(Path.GetTempPath(), "netex-schemas", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -76,6 +95,23 @@ public static partial class SchemaDownloader
             if (!Directory.Exists(xsdDir))
             {
                 throw new InvalidOperationException($"XSD directory not found at {xsdDir}");
+            }
+
+            // For tags and commit SHAs, copy the xsd/ directory into the persistent cache.
+            // We copy instead of move because /tmp may be on a different filesystem.
+            if (isCacheable)
+            {
+                var cachedXsdDir = Path.Combine(CacheRootDirectory, versionOrRef, "xsd");
+                if (Directory.Exists(cachedXsdDir))
+                {
+                    Directory.Delete(cachedXsdDir, recursive: true);
+                }
+
+                CopyDirectory(xsdDir, cachedXsdDir);
+                TryDeleteDirectory(tempDir);
+
+                log?.Invoke($"Schemas cached at {cachedXsdDir}");
+                return new SchemaDirectory(cachedXsdDir, ownsDirectory: false);
             }
 
             log?.Invoke($"Schemas extracted to {xsdDir}");
@@ -133,6 +169,21 @@ public static partial class SchemaDownloader
         return versions;
     }
 
+    private static void CopyDirectory(string source, string destination)
+    {
+        Directory.CreateDirectory(destination);
+
+        foreach (var file in Directory.GetFiles(source))
+        {
+            File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
+        }
+
+        foreach (var dir in Directory.GetDirectories(source))
+        {
+            CopyDirectory(dir, Path.Combine(destination, Path.GetFileName(dir)));
+        }
+    }
+
     internal static void TryDeleteDirectory(string path)
     {
         try
@@ -167,20 +218,32 @@ public static partial class SchemaDownloader
         return client;
     }
 
+    private static bool IsCommitSha(string value) => CommitShaPattern().IsMatch(value);
+
+    [GeneratedRegex(@"^[0-9a-fA-F]{7,40}$")]
+    private static partial Regex CommitShaPattern();
+
     [GeneratedRegex(@"<([^>]+)>;\s*rel=""next""")]
     private static partial Regex NextLinkPattern();
 }
 
 /// <summary>
-/// Represents an extracted schema directory with its parent temp directory.
-/// Disposing this instance cleans up the temporary files.
+/// Represents an extracted schema directory.
+/// When <see cref="OwnsDirectory"/> is true, disposing this instance cleans up the temporary files.
+/// Cached directories are not owned and are left in place.
 /// </summary>
 public sealed class SchemaDirectory : IDisposable
 {
-    public SchemaDirectory(string xsdPath, string tempRootPath)
+    public SchemaDirectory(string xsdPath, bool ownsDirectory)
+        : this(xsdPath, tempRootPath: null, ownsDirectory)
+    {
+    }
+
+    public SchemaDirectory(string xsdPath, string? tempRootPath, bool ownsDirectory = true)
     {
         XsdPath = xsdPath;
         TempRootPath = tempRootPath;
+        OwnsDirectory = ownsDirectory;
     }
 
     /// <summary>
@@ -189,9 +252,20 @@ public sealed class SchemaDirectory : IDisposable
     public string XsdPath { get; }
 
     /// <summary>
-    /// Root of the temporary directory tree. Deleted on <see cref="Dispose"/>.
+    /// Root of the temporary directory tree. Null for cached schemas.
     /// </summary>
-    public string TempRootPath { get; }
+    public string? TempRootPath { get; }
 
-    public void Dispose() => SchemaDownloader.TryDeleteDirectory(TempRootPath);
+    /// <summary>
+    /// Whether this instance owns the directory and should delete it on dispose.
+    /// </summary>
+    public bool OwnsDirectory { get; }
+
+    public void Dispose()
+    {
+        if (OwnsDirectory && TempRootPath is not null)
+        {
+            SchemaDownloader.TryDeleteDirectory(TempRootPath);
+        }
+    }
 }

@@ -1,6 +1,5 @@
 <Project>
   <PropertyGroup>
-    <!-- NuGet metadata shared across all NeTEx Models packages -->
     <Authors>Jason Rebelo Neves (igotinfected)</Authors>
     <Company>Spillgebees</Company>
     <PackageTags>netex;siri;public-transport;xml;schema;models</PackageTags>
@@ -18,4 +17,45 @@
     <None Include="../../assets/spillgebees.png" Pack="true" PackagePath="" />
     <None Include="../Spillgebees.NeTEx.Models/README.md" Pack="true" PackagePath="" />
   </ItemGroup>
+
+  <!-- Trigger generator to run before compilation if NetexVersion is set and no generated files exist -->
+  <Target Name="GenerateNetexModels"
+          Condition="'$(NetexVersion)' != ''"
+          BeforeTargets="BeforeCompile;CoreCompile">
+    <ItemGroup>
+      <_ExistingGeneratedFiles Include="$(MSBuildProjectDirectory)/Generated/**/*.cs" />
+    </ItemGroup>
+
+    <MSBuild Condition="'@(_ExistingGeneratedFiles)' == ''"
+             Projects="$(MSBuildThisFileDirectory)Spillgebees.NeTEx.Generator/Spillgebees.NeTEx.Generator.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)" />
+
+    <PropertyGroup Condition="'@(_ExistingGeneratedFiles)' == ''">
+      <_GeneratorProject>$(MSBuildThisFileDirectory)Spillgebees.NeTEx.Generator/Spillgebees.NeTEx.Generator.csproj</_GeneratorProject>
+      <_GeneratedOutputDir>$(MSBuildProjectDirectory)/Generated</_GeneratedOutputDir>
+      <_GenerateCommand>dotnet run</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) --project &quot;$(_GeneratorProject)&quot;</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) --configuration $(Configuration)</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) --no-build</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) -- generate</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) --version $(NetexVersion)</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) --output &quot;$(_GeneratedOutputDir)&quot;</_GenerateCommand>
+      <_GenerateCommand>$(_GenerateCommand) --namespace $(RootNamespace)</_GenerateCommand>
+    </PropertyGroup>
+
+    <Exec Condition="'@(_ExistingGeneratedFiles)' == ''"
+          Command="$(_GenerateCommand)" />
+
+    <ItemGroup Condition="'@(_ExistingGeneratedFiles)' == ''">
+      <Compile Include="$(MSBuildProjectDirectory)/Generated/**/*.cs" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Clean target to remove generated files when the project is cleaned -->
+  <Target Name="CleanGeneratedNetexModels"
+          Condition="'$(NetexVersion)' != ''"
+          AfterTargets="Clean">
+    <RemoveDir Directories="$(MSBuildProjectDirectory)/Generated" />
+  </Target>
 </Project>

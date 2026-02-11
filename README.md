@@ -1,7 +1,5 @@
 # Spillgebees.NeTEx
 
-> **Note:** This project was mostly AI-generated and is still a work in progress. It is not ready for production use.
-
 <p align="center">
     <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/spillgebees/netex/build-and-test.yml?branch=main&label=build%20%26%20test&style=for-the-badge" />
 </p>
@@ -17,19 +15,19 @@ This repository provides two things:
 
 Install only the NeTEx version you need. Versions correspond to [tags in the NeTEx-CEN/NeTEx GitHub repository](https://github.com/NeTEx-CEN/NeTEx/tags).
 
-| NeTEx version | Package | NuGet |
-|:---:|---|:---:|
-| [v1.2](https://github.com/NeTEx-CEN/NeTEx/tree/v1.2) | `Spillgebees.NeTEx.Models.V1_2` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models.V1_2?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models.V1_2) |
+|                      NeTEx version                       | Package                           |                                                                              NuGet                                                                              |
+|:--------------------------------------------------------:|-----------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|   [v1.2](https://github.com/NeTEx-CEN/NeTEx/tree/v1.2)   | `Spillgebees.NeTEx.Models.V1_2`   |   [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models.V1_2?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models.V1_2)   |
 | [v1.2.2](https://github.com/NeTEx-CEN/NeTEx/tree/v1.2.2) | `Spillgebees.NeTEx.Models.V1_2_2` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models.V1_2_2?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models.V1_2_2) |
 | [v1.2.3](https://github.com/NeTEx-CEN/NeTEx/tree/v1.2.3) | `Spillgebees.NeTEx.Models.V1_2_3` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models.V1_2_3?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models.V1_2_3) |
 | [v1.3.0](https://github.com/NeTEx-CEN/NeTEx/tree/v1.3.0) | `Spillgebees.NeTEx.Models.V1_3_0` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models.V1_3_0?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models.V1_3_0) |
 | [v1.3.1](https://github.com/NeTEx-CEN/NeTEx/tree/v1.3.1) | `Spillgebees.NeTEx.Models.V1_3_1` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models.V1_3_1?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models.V1_3_1) |
-| All versions | `Spillgebees.NeTEx.Models` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models) |
+|                       All versions                       | `Spillgebees.NeTEx.Models`        |        [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Models?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Models)        |
 
 ## Generator tool
 
-| Package | NuGet |
-|---|:---:|
+| Package                       |                                                                          NuGet                                                                          |
+|-------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | `Spillgebees.NeTEx.Generator` | [![NuGet](https://img.shields.io/nuget/vpre/Spillgebees.NeTEx.Generator?logo=nuget&label=)](https://www.nuget.org/packages/Spillgebees.NeTEx.Generator) |
 
 ## Quick start
@@ -99,24 +97,16 @@ netex-generate list-versions   List available NeTEx-CEN/NeTEx version tags
 
 ## Building from source
 
-The generated model classes are **not committed** to the repository -- they are generated at build time. To build locally:
+The generated model classes are **not committed** to the repository -- they are generated automatically at build time. To build locally:
 
 ```bash
-# 1. Build the generator
-dotnet build src/Spillgebees.NeTEx.Generator --configuration Release
-
-# 2. Generate models for each NeTEx-CEN/NeTEx version tag
-for tag_ns in "v1.2 V1_2" "v1.2.2 V1_2_2" "v1.2.3 V1_2_3" "v1.3.0 V1_3_0" "v1.3.1 V1_3_1"; do
-  set -- $tag_ns
-  dotnet run --project src/Spillgebees.NeTEx.Generator --configuration Release -- \
-    generate --version "$1" --output "src/Spillgebees.NeTEx.Models.$2/Generated" \
-    --namespace "Spillgebees.NeTEx.Models.$2"
-done
-
-# 3. Build and test
 dotnet build Spillgebees.NeTEx.Models.slnx --configuration Release
 dotnet test Spillgebees.NeTEx.Models.slnx --configuration Release
 ```
+
+The build will automatically download the NeTEx XSD schemas from GitHub, generate the C# classes, and compile them. Downloaded schemas are cached in local app data (`netex-schemas/`) so subsequent builds don't require network access.
+
+Use `dotnet clean` to remove the generated files and trigger a fresh generation on the next build.
 
 ## Supported frameworks
 

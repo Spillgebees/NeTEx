@@ -27,7 +27,7 @@ public class NetexSerializationTests
 
         // assert
         deserialized.Should().NotBeNull();
-        deserialized!.Value.Should().Be("Central Station");
+        deserialized.Value.Should().Be("Central Station");
         deserialized.Lang.Should().Be("en");
     }
 
@@ -54,7 +54,7 @@ public class NetexSerializationTests
         // assert
         xml.Should().Contain("<StopPlaceType>railStation</StopPlaceType>");
         deserialized.Should().NotBeNull();
-        deserialized!.StopPlaceType.Should().Be(StopTypeEnumeration.RailStation);
+        deserialized.StopPlaceType.Should().Be(StopTypeEnumeration.RailStation);
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class NetexSerializationTests
         // assert
         xml.Should().Contain("<ParticipantRef>test-participant</ParticipantRef>");
         deserialized.Should().NotBeNull();
-        deserialized!.ParticipantRef.Should().Be("test-participant");
+        deserialized.ParticipantRef.Should().Be("test-participant");
     }
 
     [Test]
@@ -109,7 +109,7 @@ public class NetexSerializationTests
         xml.Should().Contain("<OrganisationType>authority</OrganisationType>");
 
         deserialized.Should().NotBeNull();
-        deserialized!.OrganisationType.Should().HaveCount(2);
+        deserialized.OrganisationType.Should().HaveCount(2);
         deserialized.OrganisationType[0].Should().Be(OrganisationTypeEnumeration.Operator);
         deserialized.OrganisationType[1].Should().Be(OrganisationTypeEnumeration.Authority);
     }
@@ -140,7 +140,7 @@ public class NetexSerializationTests
         xml.Should().Contain("<ParkingPaymentProcess>payByMobileDevice</ParkingPaymentProcess>");
 
         deserialized.Should().NotBeNull();
-        deserialized!.ParkingPaymentProcess.Should().HaveCount(2);
+        deserialized.ParkingPaymentProcess.Should().HaveCount(2);
         deserialized.ParkingPaymentProcess[0].Should().Be(ParkingPaymentProcessEnumeration.PayAndDisplay);
         deserialized.ParkingPaymentProcess[1].Should().Be(ParkingPaymentProcessEnumeration.PayByMobileDevice);
     }
@@ -156,7 +156,7 @@ public class NetexSerializationTests
 
         // assert
         xmlTypeAttr.Should().NotBeNull();
-        xmlTypeAttr!.Namespace.Should().Be("http://www.netex.org.uk/netex");
+        xmlTypeAttr.Namespace.Should().Be("http://www.netex.org.uk/netex");
     }
 
     [Test]
@@ -170,7 +170,7 @@ public class NetexSerializationTests
 
         // assert
         xmlRootAttr.Should().NotBeNull();
-        xmlRootAttr!.ElementName.Should().Be("PublicationDelivery");
+        xmlRootAttr.ElementName.Should().Be("PublicationDelivery");
         xmlRootAttr.Namespace.Should().Be("http://www.netex.org.uk/netex");
     }
 }

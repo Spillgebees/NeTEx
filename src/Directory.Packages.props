@@ -8,8 +8,7 @@
     <PackageVersion Include="MinVer" Version="6.0.0" />
 
     <!-- Generator dependencies -->
-    <!-- TODO: Update version to the first upstream release containing EnumCollection support. -->
-    <PackageVersion Include="XmlSchemaClassGenerator" Version="REPLACE_WITH_RELEASE_VERSION" />
+    <PackageVersion Include="XmlSchemaClassGenerator-beta" Version="3.0.1221" />
     <PackageVersion Include="System.CommandLine" Version="2.0.2" />
 
     <!-- Test dependencies -->

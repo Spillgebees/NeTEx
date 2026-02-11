@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="XmlSchemaClassGenerator" />
+    <PackageReference Include="XmlSchemaClassGenerator-beta" />
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 </Project>

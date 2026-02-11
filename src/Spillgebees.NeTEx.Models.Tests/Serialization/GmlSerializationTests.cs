@@ -27,7 +27,7 @@ public class GmlSerializationTests
 
         // assert
         deserialized.Should().NotBeNull();
-        deserialized!.Value.Should().Be("59.911491 10.752245");
+        deserialized.Value.Should().Be("59.911491 10.752245");
         deserialized.SrsName.Should().Be("urn:ogc:def:crs:EPSG::4326");
     }
 
@@ -42,6 +42,6 @@ public class GmlSerializationTests
 
         // assert
         xmlTypeAttr.Should().NotBeNull();
-        xmlTypeAttr!.Namespace.Should().Be("http://www.opengis.net/gml/3.2");
+        xmlTypeAttr.Namespace.Should().Be("http://www.opengis.net/gml/3.2");
     }
 }

@@ -32,15 +32,15 @@ public class PublicationDeliveryDeserializationTests
         var participantRef = doc.SelectSingleNode(
             "/netex:PublicationDelivery/netex:ParticipantRef", nsManager);
         participantRef.Should().NotBeNull();
-        participantRef!.InnerText.Should().Be("test-participant");
+        participantRef.InnerText.Should().Be("test-participant");
 
         var stopPlaceName = doc.SelectSingleNode("//netex:StopPlace/netex:Name", nsManager);
         stopPlaceName.Should().NotBeNull();
-        stopPlaceName!.InnerText.Should().Be("Central Station");
+        stopPlaceName.InnerText.Should().Be("Central Station");
 
         var stopPlaceType = doc.SelectSingleNode("//netex:StopPlace/netex:StopPlaceType", nsManager);
         stopPlaceType.Should().NotBeNull();
-        stopPlaceType!.InnerText.Should().Be("railStation");
+        stopPlaceType.InnerText.Should().Be("railStation");
     }
 
     [Test]
@@ -58,11 +58,11 @@ public class PublicationDeliveryDeserializationTests
         // assert
         var lineName = doc.SelectSingleNode("//netex:Line/netex:Name", nsManager);
         lineName.Should().NotBeNull();
-        lineName!.InnerText.Should().Be("Bus Line 42");
+        lineName.InnerText.Should().Be("Bus Line 42");
 
         var transportMode = doc.SelectSingleNode("//netex:Line/netex:TransportMode", nsManager);
         transportMode.Should().NotBeNull();
-        transportMode!.InnerText.Should().Be("bus");
+        transportMode.InnerText.Should().Be("bus");
     }
 
     [Test]
@@ -84,19 +84,19 @@ public class PublicationDeliveryDeserializationTests
         var participantRef = doc.SelectSingleNode(
             "/netex:PublicationDelivery/netex:ParticipantRef", nsManager);
         participantRef.Should().NotBeNull();
-        participantRef!.InnerText.Should().Be("test-participant");
+        participantRef.InnerText.Should().Be("test-participant");
 
         var longitude = doc.SelectSingleNode("//netex:Location/netex:Longitude", nsManager);
         longitude.Should().NotBeNull();
-        longitude!.InnerText.Should().Be("10.752245");
+        longitude.InnerText.Should().Be("10.752245");
 
         var latitude = doc.SelectSingleNode("//netex:Location/netex:Latitude", nsManager);
         latitude.Should().NotBeNull();
-        latitude!.InnerText.Should().Be("59.911491");
+        latitude.InnerText.Should().Be("59.911491");
 
         var stopPlaceName = doc.SelectSingleNode("//netex:StopPlace/netex:Name", nsManager);
         stopPlaceName.Should().NotBeNull();
-        stopPlaceName!.InnerText.Should().Be("Oslo S");
+        stopPlaceName.InnerText.Should().Be("Oslo S");
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class PublicationDeliveryDeserializationTests
 
         // assert
         deserialized.Should().NotBeNull();
-        deserialized!.Value.Should().Be("Round trip test");
+        deserialized.Value.Should().Be("Round trip test");
         deserialized.Lang.Should().Be("en");
     }
 }
