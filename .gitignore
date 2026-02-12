@@ -198,6 +198,7 @@ PublishScripts/
 **/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
+
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
@@ -417,3 +418,8 @@ src/Spillgebees.NeTEx.Models*/Generated/
 
 # OpenCode
 .opencode/
+
+# TODO: Remove once local xscgen changes are merged upstream.
+# Local xscgen pre-release package (band-aid until upstream merges).
+# Must appear after both the *.nupkg and **/[Pp]ackages/* rules to negate them.
+!**/[Pp]ackages/XmlSchemaClassGenerator-beta.*.nupkg

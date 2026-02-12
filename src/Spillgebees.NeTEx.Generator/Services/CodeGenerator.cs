@@ -52,6 +52,10 @@ public static class CodeGenerator
             CollectionType = typeof(List<>),
             EnumCollection = true,
 
+            // Nullable and required
+            EnableNullableDirective = true,
+            GenerateRequiredModifier = true,
+
             // Minimal attribute noise
             GenerateSerializableAttribute = false,
             GenerateDesignerCategoryAttribute = false,

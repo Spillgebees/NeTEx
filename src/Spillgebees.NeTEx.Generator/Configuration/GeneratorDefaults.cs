@@ -25,6 +25,6 @@ public static class GeneratorDefaults
     public const string GitHubApiTagsUrl =
         "https://api.github.com/repos/NeTEx-CEN/NeTEx/tags";
 
-    public const string PublicationSchemaFileName = "NeTEx_publication-NoConstraint.xsd";
+    public const string PublicationSchemaFileName = "NeTEx_publication.xsd";
     public const string SiriSchemaFileName = "NeTEx_siri.xsd";
 }
