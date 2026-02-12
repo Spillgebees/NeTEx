@@ -104,13 +104,13 @@ public class NetexSerializationTests
         using var reader = new StringReader(xml);
         var deserialized = serializer.Deserialize(reader) as Organisation;
 
-        // assert
-        xml.Should().Contain("<OrganisationType>operator</OrganisationType>");
-        xml.Should().Contain("<OrganisationType>authority</OrganisationType>");
+        // assert — xsd:list types serialize as a single element with space-separated values
+        xml.Should().Contain("<OrganisationType>operator authority</OrganisationType>");
+        xml.Should().NotContain("<OrganisationType>operator</OrganisationType>");
 
         deserialized.Should().NotBeNull();
-        deserialized.OrganisationType.Should().HaveCount(2);
-        deserialized.OrganisationType[0].Should().Be(OrganisationTypeEnumeration.Operator);
+        deserialized!.OrganisationType.Should().HaveCount(2);
+        deserialized.OrganisationType![0].Should().Be(OrganisationTypeEnumeration.Operator);
         deserialized.OrganisationType[1].Should().Be(OrganisationTypeEnumeration.Authority);
     }
 
@@ -135,13 +135,13 @@ public class NetexSerializationTests
         using var reader = new StringReader(xml);
         var deserialized = serializer.Deserialize(reader) as Parking;
 
-        // assert
-        xml.Should().Contain("<ParkingPaymentProcess>payAndDisplay</ParkingPaymentProcess>");
-        xml.Should().Contain("<ParkingPaymentProcess>payByMobileDevice</ParkingPaymentProcess>");
+        // assert — xsd:list types serialize as a single element with space-separated values
+        xml.Should().Contain("<ParkingPaymentProcess>payAndDisplay payByMobileDevice</ParkingPaymentProcess>");
+        xml.Should().NotContain("<ParkingPaymentProcess>payAndDisplay</ParkingPaymentProcess>");
 
         deserialized.Should().NotBeNull();
-        deserialized.ParkingPaymentProcess.Should().HaveCount(2);
-        deserialized.ParkingPaymentProcess[0].Should().Be(ParkingPaymentProcessEnumeration.PayAndDisplay);
+        deserialized!.ParkingPaymentProcess.Should().HaveCount(2);
+        deserialized.ParkingPaymentProcess![0].Should().Be(ParkingPaymentProcessEnumeration.PayAndDisplay);
         deserialized.ParkingPaymentProcess[1].Should().Be(ParkingPaymentProcessEnumeration.PayByMobileDevice);
     }
 
