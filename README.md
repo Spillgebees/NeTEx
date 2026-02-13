@@ -2,7 +2,7 @@
 
 <p align="center">
     <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/spillgebees/transmodel/build-and-test.yml?branch=main&label=build%20%26%20test&style=for-the-badge" />
-    <img alt="License" src="https://img.shields.io/github/license/spillgebees/transmodel?style=for-the-badge" />
+    <img alt="License" src="https://img.shields.io/badge/license-EUPL--1.2-blue?style=for-the-badge" />
 </p>
 
 Strongly-typed C# XML bindings for [Transmodel](https://transmodel-cen.eu/)-based European public transport standards. Currently, covers [NeTEx](https://github.com/NeTEx-CEN/NeTEx) (Network Timetable Exchange) and [SIRI](https://github.com/SIRI-CEN/SIRI) (Service Interface for Real-time Information), with the flexibility to support additional Transmodel-based standards.
