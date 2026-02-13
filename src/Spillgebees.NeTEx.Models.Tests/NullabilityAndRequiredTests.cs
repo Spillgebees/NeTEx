@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using AwesomeAssertions;
 using Spillgebees.NeTEx.Models.V1_3_1.NeTEx;
+using Spillgebees.NeTEx.Models.V1_3_1.SIRI;
 
 namespace Spillgebees.NeTEx.Models.Tests;
 
@@ -35,10 +36,26 @@ public class NullabilityAndRequiredTests
     }
 
     [Test]
-    public void Should_construct_multilingual_string_with_required_value()
+    public void Should_construct_multilingual_string_with_nullable_value()
     {
-        // arrange & act — Value is a required [XmlText] property
+        // arrange & act — MultilingualString.Value is a nullable [XmlText] property
+        // because xs:string has no minLength restriction; absent text content
+        // produces a clean self-closing element.
         var str = new MultilingualString
+        {
+            Value = "hello",
+        };
+
+        // assert
+        str.Value.Should().Be("hello");
+    }
+
+    [Test]
+    public void Should_construct_natural_language_string_with_required_value()
+    {
+        // arrange & act — NaturalLanguageStringStructure.Value is a required [XmlText]
+        // property because it extends PopulatedStringType which has minLength=1.
+        var str = new NaturalLanguageStringStructure
         {
             Value = "hello",
         };
@@ -183,11 +200,29 @@ public class NullabilityAndRequiredTests
     }
 
     [Test]
-    public void Should_have_required_modifier_on_xml_text_value_property()
+    public void Should_not_have_required_modifier_on_unconstrained_xml_text_value_property()
     {
-        // arrange — MultilingualString.Value is an [XmlText] property
+        // arrange — MultilingualString.Value is an [XmlText] property whose base type
+        // (xs:string) has no minLength restriction. It should be nullable, not required,
+        // because absent text content produces a clean self-closing element.
         var property = typeof(MultilingualString)
             .GetProperty(nameof(MultilingualString.Value))!;
+
+        // act
+        var isRequired = property.IsDefined(typeof(RequiredMemberAttribute), inherit: false);
+
+        // assert
+        isRequired.Should().BeFalse();
+    }
+
+    [Test]
+    public void Should_have_required_modifier_on_min_length_constrained_xml_text_value_property()
+    {
+        // arrange — NaturalLanguageStringStructure.Value is an [XmlText] property whose
+        // base type (PopulatedStringType) has minLength=1. The text content is effectively
+        // required, so the property gets the 'required' modifier.
+        var property = typeof(NaturalLanguageStringStructure)
+            .GetProperty(nameof(NaturalLanguageStringStructure.Value))!;
 
         // act
         var isRequired = property.IsDefined(typeof(RequiredMemberAttribute), inherit: false);
@@ -272,6 +307,40 @@ public class NullabilityAndRequiredTests
 
         // assert
         info.WriteState.Should().Be(NullabilityState.Nullable);
+    }
+
+    [Test]
+    public void Should_have_nullable_annotation_on_unconstrained_xml_text_value_property()
+    {
+        // arrange — MultilingualString.Value has no minLength restriction,
+        // so it should be string? (nullable).
+        var property = typeof(MultilingualString)
+            .GetProperty(nameof(MultilingualString.Value))!;
+        var context = new NullabilityInfoContext();
+
+        // act
+        var info = context.Create(property);
+
+        // assert
+        info.WriteState.Should().Be(NullabilityState.Nullable);
+        info.ReadState.Should().Be(NullabilityState.Nullable);
+    }
+
+    [Test]
+    public void Should_not_have_nullable_annotation_on_min_length_constrained_xml_text_value_property()
+    {
+        // arrange — NaturalLanguageStringStructure.Value has minLength=1,
+        // so it should be required string (not nullable).
+        var property = typeof(NaturalLanguageStringStructure)
+            .GetProperty(nameof(NaturalLanguageStringStructure.Value))!;
+        var context = new NullabilityInfoContext();
+
+        // act
+        var info = context.Create(property);
+
+        // assert
+        info.WriteState.Should().Be(NullabilityState.NotNull);
+        info.ReadState.Should().Be(NullabilityState.NotNull);
     }
 
     // -- metadata: #nullable enable directive -------------------------------------
