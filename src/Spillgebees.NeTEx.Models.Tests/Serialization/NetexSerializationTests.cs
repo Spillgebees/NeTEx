@@ -189,6 +189,57 @@ public class NetexSerializationTests
     }
 
     [Test]
+    public void Should_serialize_simple_content_ref_as_self_closing_element_when_value_is_null()
+    {
+        // arrange
+        // CodespaceRefStructure has a simpleContent text body (Value) and a required ref attribute.
+        // When Value is null the element should serialize as self-closing: <CodespaceRef ref="..." />
+        var serializer = new XmlSerializer(typeof(CodespaceRefStructure));
+        var codespaceRef = new CodespaceRefStructure { Ref = "nsr" };
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, codespaceRef);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as CodespaceRefStructure;
+
+        // assert — self-closing element (no text body)
+        xml.Should().Contain("ref=\"nsr\"");
+        xml.Should().NotContain(">nsr</");
+        xml.Should().Contain("/>");
+
+        deserialized.Should().NotBeNull();
+        deserialized.Ref.Should().Be("nsr");
+        deserialized.Value.Should().BeNullOrEmpty();
+    }
+
+    [Test]
+    public void Should_serialize_simple_content_ref_with_text_body_when_value_is_set()
+    {
+        // arrange
+        var serializer = new XmlSerializer(typeof(CodespaceRefStructure));
+        var codespaceRef = new CodespaceRefStructure { Ref = "nsr", Value = "NSR" };
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, codespaceRef);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as CodespaceRefStructure;
+
+        // assert — element has text content
+        xml.Should().Contain("ref=\"nsr\"");
+        xml.Should().Contain(">NSR</CodespaceRef>");
+
+        deserialized.Should().NotBeNull();
+        deserialized.Ref.Should().Be("nsr");
+        deserialized.Value.Should().Be("NSR");
+    }
+
+    [Test]
     public void Should_have_correct_xml_type_namespace_on_stop_place()
     {
         // act
