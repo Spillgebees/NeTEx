@@ -18,6 +18,12 @@
     <None Include="../Spillgebees.NeTEx.Models/README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="XmlSchemaClassGenerator.Analyzer" PrivateAssets="none">
+      <IncludeAssets>analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <!-- Trigger generator to run before compilation if NetexVersion is set and no generated files exist -->
   <Target Name="GenerateNetexModels"
           Condition="'$(NetexVersion)' != ''"

@@ -424,3 +424,4 @@ src/siri/**/Generated/
 # Local xscgen pre-release package (band-aid until upstream merges).
 # Must appear after both the *.nupkg and **/[Pp]ackages/* rules to negate them.
 !**/[Pp]ackages/XmlSchemaClassGenerator-beta.*.nupkg
+!**/[Pp]ackages/XmlSchemaClassGenerator*.nupkg
