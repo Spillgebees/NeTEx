@@ -19,9 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="XmlSchemaClassGenerator.Analyzer" PrivateAssets="none">
+    <PackageReference Include="XmlSchemaClassGenerator.Analyzer" PrivateAssets="all" GeneratePathProperty="true">
       <IncludeAssets>analyzers</IncludeAssets>
     </PackageReference>
+    <!-- TODO: Remove this once XmlSchemaClassGenerator.Analyzer is published to nuget.org
+         and switch the PackageReference above to PrivateAssets="none" instead. -->
+    <None Include="$(PkgXmlSchemaClassGenerator_Analyzer)/analyzers/dotnet/cs/XmlSchemaClassGenerator.Analyzer.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs/"
+          Visible="false" />
   </ItemGroup>
 
   <!-- Trigger generator to run before compilation if SiriVersion is set and no generated files exist -->
