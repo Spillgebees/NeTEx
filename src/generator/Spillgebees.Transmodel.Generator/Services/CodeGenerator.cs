@@ -27,7 +27,7 @@ public static class CodeGenerator
             [new NamespaceKey(SharedDefaults.W3XmlNamespace)] = w3Namespace
         };
 
-        var generator = CreateBaseGenerator(outputDirectory, namespaceProvider, verbose);
+        var generator = CreateBaseGenerator(outputDirectory, rootNamespace, namespaceProvider, verbose);
         // Set NamingProvider after the object initializer to avoid being overwritten
         // by any NamingScheme setter. This renames abstract dummy elements (e.g. 'StopPlace_')
         // so that concrete elements get the clean C# class name (e.g. 'StopPlace').
@@ -91,7 +91,7 @@ public static class CodeGenerator
             [new NamespaceKey(SharedDefaults.W3XmlNamespace)] = w3Namespace
         };
 
-        var generator = CreateBaseGenerator(outputDirectory, namespaceProvider, verbose);
+        var generator = CreateBaseGenerator(outputDirectory, rootNamespace, namespaceProvider, verbose);
         // SIRI doesn't have the underscore naming convention, use default PascalCase
         generator.NamingProvider = new NamingProvider(NamingScheme.PascalCase);
 
@@ -115,6 +115,7 @@ public static class CodeGenerator
 
     private static XscGenerator CreateBaseGenerator(
         string outputDirectory,
+        string rootNamespace,
         NamespaceProvider namespaceProvider,
         bool verbose)
     {
@@ -148,6 +149,7 @@ public static class CodeGenerator
             GenerateRequiredModifier = true,
             UseShouldSerializePattern = true,
             GenerateChoiceGroupAttributes = true,
+            ChoiceGroupAttributeNamespace = rootNamespace,
 
             // Minimal attribute noise
             GenerateSerializableAttribute = false,

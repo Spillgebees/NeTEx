@@ -1,7 +1,7 @@
 using System.Reflection;
 using AwesomeAssertions;
+using Spillgebees.NeTEx.Models.V1_3_1;
 using Spillgebees.NeTEx.Models.V1_3_1.NeTEx;
-using XmlSchemaClassGenerator.Attributes;
 
 namespace Spillgebees.NeTEx.Models.Tests;
 

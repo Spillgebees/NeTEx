@@ -1,7 +1,7 @@
 using System.Reflection;
 using AwesomeAssertions;
+using Spillgebees.SIRI.Models.V2_2;
 using Spillgebees.SIRI.Models.V2_2.SIRI;
-using XmlSchemaClassGenerator.Attributes;
 
 namespace Spillgebees.SIRI.Models.Tests;
 

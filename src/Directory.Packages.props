@@ -8,8 +8,8 @@
     <PackageVersion Include="MinVer" Version="6.0.0" />
 
     <!-- Generator dependencies -->
-    <PackageVersion Include="XmlSchemaClassGenerator-beta" Version="99.0.6-local" />
-    <PackageVersion Include="XmlSchemaClassGenerator.Analyzer" Version="99.0.6-local" />
+    <PackageVersion Include="XmlSchemaClassGenerator-beta" Version="99.0.7-local" />
+    <PackageVersion Include="XmlSchemaClassGenerator.Analyzer" Version="99.0.7-local" />
     <PackageVersion Include="System.CommandLine" Version="2.0.2" />
 
     <!-- Test dependencies -->
