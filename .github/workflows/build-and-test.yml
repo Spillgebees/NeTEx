@@ -29,6 +29,7 @@ jobs:
               - 'src/General.targets'
               - 'src/Models.targets'
               - 'src/Directory.Packages.props'
+              - 'packages/**'
               - 'global.json'
               - 'Spillgebees.NeTEx.Models.slnx'
 

@@ -24,7 +24,9 @@ jobs:
         with:
           global-json-file: global.json
           cache: true
-          cache-dependency-path: src/Directory.Packages.props
+          cache-dependency-path: |
+            src/Directory.Packages.props
+            packages/*.nupkg # TODO: remove once we move back to a stable xscgen package
 
       - name: build solution
         run: dotnet build Spillgebees.NeTEx.Models.slnx --configuration Release
