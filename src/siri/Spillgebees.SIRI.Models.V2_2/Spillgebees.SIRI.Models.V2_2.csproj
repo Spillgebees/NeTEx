@@ -4,6 +4,6 @@
 
   <PropertyGroup>
     <SiriVersion>v2.2</SiriVersion>
-    <Description>Pre-generated C# model classes for SIRI (Service Interface for Real-time Information) $(SiriVersion) including IFOPT, ACSB, DATEX2, and WSDL schemas.</Description>
+    <Description>Pre-generated C# XML bindings for SIRI (Service Interface for Real-time Information) $(SiriVersion) including IFOPT, ACSB, DATEX2, and WSDL schemas.</Description>
   </PropertyGroup>
 </Project>

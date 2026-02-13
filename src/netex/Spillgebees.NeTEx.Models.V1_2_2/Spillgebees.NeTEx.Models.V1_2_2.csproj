@@ -4,6 +4,6 @@
 
   <PropertyGroup>
     <NetexVersion>v1.2.2</NetexVersion>
-    <Description>Pre-generated C# model classes for NeTEx (Network Timetable Exchange) $(NetexVersion) and associated SIRI/GML schemas.</Description>
+    <Description>Pre-generated C# XML bindings for NeTEx (Network Timetable Exchange) $(NetexVersion) and associated SIRI/GML schemas.</Description>
   </PropertyGroup>
 </Project>

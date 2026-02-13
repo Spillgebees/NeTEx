@@ -11,7 +11,7 @@
     <!-- NuGet metadata -->
     <Authors>Jason Rebelo Neves (igotinfected)</Authors>
     <Company>Spillgebees</Company>
-    <Description>CLI tool for generating C# model classes from NeTEx (Network Timetable Exchange) and SIRI (Service Interface for Real-time Information) XSD schemas. Downloads schemas from the official NeTEx-CEN and SIRI-CEN repositories and generates modern C# code using XmlSchemaClassGenerator.</Description>
+    <Description>CLI tool for generating C# XML bindings from NeTEx (Network Timetable Exchange) and SIRI (Service Interface for Real-time Information) XSD schemas. Downloads schemas from the official NeTEx-CEN and SIRI-CEN repositories and generates modern C# XML bindings using XmlSchemaClassGenerator.</Description>
     <PackageTags>netex;siri;public-transport;xml;schema;code-generation;dotnet-tool</PackageTags>
     <PackageLicenseExpression>EUPL-1.2</PackageLicenseExpression>
     <PackageIcon>spillgebees.png</PackageIcon>

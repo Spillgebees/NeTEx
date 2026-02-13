@@ -3,7 +3,7 @@
   <Import Project="../NeTEx.Models.targets" />
 
   <PropertyGroup>
-    <Description>Meta-package that includes pre-generated C# model classes for all official NeTEx (Network Timetable Exchange) schema versions. Install this package to get models for every supported version, or install individual version packages for a smaller footprint.</Description>
+    <Description>Meta-package that includes pre-generated C# XML bindings for all official NeTEx (Network Timetable Exchange) schema versions. Install this package to get bindings for every supported version, or install individual version packages for a smaller footprint.</Description>
   </PropertyGroup>
 
   <ItemGroup>

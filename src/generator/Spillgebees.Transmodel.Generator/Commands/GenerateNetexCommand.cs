@@ -43,7 +43,7 @@ public static class GenerateNetexCommand
             DefaultValueFactory = _ => false,
         };
 
-        var command = new Command("generate-netex", "Generate C# model classes from NeTEx XSD schemas");
+        var command = new Command("generate-netex", "Generate C# XML bindings from NeTEx XSD schemas");
         command.Options.Add(versionOption);
         command.Options.Add(refOption);
         command.Options.Add(outputOption);
@@ -98,7 +98,7 @@ public static class GenerateNetexCommand
                     logVerboseLine,
                     cancellationToken);
 
-                logVerboseLine?.Invoke("Generating C# models...");
+                logVerboseLine?.Invoke("Generating C# XML bindings...");
                 logVerboseLine?.Invoke($"  Output:     {Path.GetFullPath(output)}");
                 logVerboseLine?.Invoke($"  Namespace:  {rootNamespace}");
                 logVerboseLine?.Invoke("  Sub-namespaces: .NeTEx, .SIRI, .GML");
