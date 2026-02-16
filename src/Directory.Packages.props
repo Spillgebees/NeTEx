@@ -4,8 +4,8 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Build tooling -->
-    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
-    <PackageVersion Include="MinVer" Version="6.0.0" />
+    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.39" />
+    <PackageVersion Include="MinVer" Version="6.1.0" />
 
     <!-- Generator dependencies -->
     <PackageVersion Include="XmlSchemaClassGenerator-beta" Version="99.0.9-local" />
