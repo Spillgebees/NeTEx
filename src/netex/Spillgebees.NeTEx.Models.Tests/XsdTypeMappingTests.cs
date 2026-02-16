@@ -104,7 +104,7 @@ public class XsdTypeMappingTests
     }
 
     [Test]
-    public void Should_have_default_value_attribute_on_version_property()
+    public void Should_not_have_default_value_attribute_on_nullable_string_property_with_xsd_default()
     {
         // arrange
         var property = typeof(PublicationDeliveryStructure)
@@ -114,8 +114,22 @@ public class XsdTypeMappingTests
         var attr = property.GetCustomAttribute<DefaultValueAttribute>();
 
         // assert
+        attr.Should().BeNull();
+    }
+
+    [Test]
+    public void Should_still_have_default_value_attribute_on_value_type_property_with_xsd_default()
+    {
+        // arrange
+        var property = typeof(DayTypeAssignmentVersionStructure)
+            .GetProperty(nameof(DayTypeAssignmentVersionStructure.IsAvailable))!;
+
+        // act
+        var attr = property.GetCustomAttribute<DefaultValueAttribute>();
+
+        // assert
         attr.Should().NotBeNull();
-        attr!.Value.Should().Be("1.0");
+        attr!.Value.Should().Be(true);
     }
 
     [Test]

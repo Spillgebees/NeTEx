@@ -96,7 +96,7 @@ public class XsdTypeMappingTests
     }
 
     [Test]
-    public void Should_have_default_value_attribute_on_siri_version_property()
+    public void Should_not_have_default_value_attribute_on_nullable_string_property_with_xsd_default()
     {
         // arrange
         var property = typeof(Siri)
@@ -106,8 +106,22 @@ public class XsdTypeMappingTests
         var attr = property.GetCustomAttribute<DefaultValueAttribute>();
 
         // assert
+        attr.Should().BeNull();
+    }
+
+    [Test]
+    public void Should_still_have_default_value_attribute_on_value_type_property_with_xsd_default()
+    {
+        // arrange
+        var property = typeof(HalfOpenTimestampOutputRangeStructure)
+            .GetProperty(nameof(HalfOpenTimestampOutputRangeStructure.EndTimeStatus))!;
+
+        // act
+        var attr = property.GetCustomAttribute<DefaultValueAttribute>();
+
+        // assert
         attr.Should().NotBeNull();
-        attr!.Value.Should().Be("2.1");
+        attr!.Value.Should().Be(EndTimeStatusEnumeration.Undefined);
     }
 
     [Test]
@@ -122,21 +136,6 @@ public class XsdTypeMappingTests
 
         // assert
         range.EndTimeStatus.Should().Be(EndTimeStatusEnumeration.Undefined);
-    }
-
-    [Test]
-    public void Should_have_default_value_attribute_on_enum_property()
-    {
-        // arrange
-        var property = typeof(HalfOpenTimestampOutputRangeStructure)
-            .GetProperty(nameof(HalfOpenTimestampOutputRangeStructure.EndTimeStatus))!;
-
-        // act
-        var attr = property.GetCustomAttribute<DefaultValueAttribute>();
-
-        // assert
-        attr.Should().NotBeNull();
-        attr!.Value.Should().Be(EndTimeStatusEnumeration.Undefined);
     }
 
     [Test]

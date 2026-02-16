@@ -157,8 +157,6 @@ public class NetexSerializationTests
         deserialized.ParkingPaymentProcess[1].Should().Be(ParkingPaymentProcessEnumeration.PayByMobileDevice);
     }
 
-
-
     [Test]
     public void Should_serialize_and_deserialize_optional_element_with_default_value_to_nullable_property_with_fallback_default()
     {
@@ -266,5 +264,66 @@ public class NetexSerializationTests
         xmlRootAttr.Should().NotBeNull();
         xmlRootAttr.ElementName.Should().Be("PublicationDelivery");
         xmlRootAttr.Namespace.Should().Be("http://www.netex.org.uk/netex");
+    }
+
+    /// <summary>
+    /// PublicationDeliveryStructure.Version defaults to "1.0" via backing field initialization.
+    /// With <c>[DefaultValueAttribute]</c> suppressed on <c>string?</c> properties,
+    /// <c>XmlSerializer</c> must include the default value in the serialized XML.
+    /// </summary>
+    [Test]
+    public void Should_serialize_default_string_value_when_property_is_left_as_default()
+    {
+        // arrange
+        var serializer = new XmlSerializer(typeof(PublicationDeliveryStructure));
+        var original = new PublicationDeliveryStructure
+        {
+            PublicationTimestamp = DateTimeOffset.UtcNow,
+            ParticipantRef = "test",
+        };
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, original);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as PublicationDeliveryStructure;
+
+        // assert
+        xml.Should().Contain("version=\"1.0\"");
+        deserialized.Should().NotBeNull();
+        deserialized.Version.Should().Be("1.0");
+    }
+
+    /// <summary>
+    /// Even when PublicationDeliveryStructure.Version is explicitly set to the default value of "1.0",
+    /// it should still be serialized in the XML since the [DefaultValue] attribute is suppressed on nullable string
+    /// properties to avoid unintended consequences of the serializer omitting elements with default values.
+    /// </summary>
+    [Test]
+    public void Should_serialize_default_string_value_when_property_is_explicitly_set_to_default()
+    {
+        // arrange
+        var serializer = new XmlSerializer(typeof(PublicationDeliveryStructure));
+        var original = new PublicationDeliveryStructure
+        {
+            PublicationTimestamp = DateTimeOffset.UtcNow,
+            ParticipantRef = "test",
+            Version = "1.0",
+        };
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, original);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as PublicationDeliveryStructure;
+
+        // assert
+        xml.Should().Contain("version=\"1.0\"");
+        deserialized.Should().NotBeNull();
+        deserialized.Version.Should().Be("1.0");
     }
 }

@@ -152,4 +152,54 @@ public class SiriSerializationTests
         xmlTypeAttr.Should().NotBeNull();
         xmlTypeAttr.Namespace.Should().Be("http://www.siri.org.uk/siri");
     }
+
+    /// <summary>
+    /// Siri.Version defaults to "2.1" via backing field initialization.
+    /// With <c>[DefaultValueAttribute]</c> suppressed on <c>string?</c> properties,
+    /// <c>XmlSerializer</c> must include the default value in the serialized XML.
+    /// </summary>
+    [Test]
+    public void Should_serialize_default_string_value_when_property_is_left_as_default()
+    {
+        // arrange
+        var serializer = new XmlSerializer(typeof(Siri));
+        var original = new Siri();
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, original);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as Siri;
+
+        // assert
+        xml.Should().Contain("version=\"2.1\"");
+        deserialized.Should().NotBeNull();
+        deserialized.Version.Should().Be("2.1");
+    }
+
+    /// <summary>
+    /// Even when Siri.Version is explicitly set to the default value of "2.1", it should still be serialized in the XML since the [DefaultValue] attribute is suppressed on nullable string properties to avoid unintended consequences of the serializer omitting elements with default values.
+    /// </summary>
+    [Test]
+    public void Should_serialize_default_string_value_when_property_is_explicitly_set_to_default()
+    {
+        // arrange — explicitly setting Version to the same value as the XSD default
+        var serializer = new XmlSerializer(typeof(Siri));
+        var original = new Siri { Version = "2.1" };
+
+        // act
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, original);
+        var xml = writer.ToString();
+
+        using var reader = new StringReader(xml);
+        var deserialized = serializer.Deserialize(reader) as Siri;
+
+        // assert
+        xml.Should().Contain("version=\"2.1\"");
+        deserialized.Should().NotBeNull();
+        deserialized.Version.Should().Be("2.1");
+    }
 }
