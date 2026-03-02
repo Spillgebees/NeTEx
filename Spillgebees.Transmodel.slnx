@@ -22,6 +22,7 @@
     <Project Path="src/netex/Spillgebees.NeTEx.Models.V1_2_3/Spillgebees.NeTEx.Models.V1_2_3.csproj" />
     <Project Path="src/netex/Spillgebees.NeTEx.Models.V1_3_0/Spillgebees.NeTEx.Models.V1_3_0.csproj" />
     <Project Path="src/netex/Spillgebees.NeTEx.Models.V1_3_1/Spillgebees.NeTEx.Models.V1_3_1.csproj" />
+    <Project Path="src/netex/Spillgebees.NeTEx.Models.V2_0_0/Spillgebees.NeTEx.Models.V2_0_0.csproj" />
     <Project Path="src/netex/Spillgebees.NeTEx.Models.Tests/Spillgebees.NeTEx.Models.Tests.csproj" />
   </Folder>
 

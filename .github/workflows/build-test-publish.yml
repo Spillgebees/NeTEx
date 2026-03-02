@@ -42,6 +42,7 @@ jobs:
           dotnet pack src/netex/Spillgebees.NeTEx.Models.V1_2_3/Spillgebees.NeTEx.Models.V1_2_3.csproj --configuration Release --no-build --output package
           dotnet pack src/netex/Spillgebees.NeTEx.Models.V1_3_0/Spillgebees.NeTEx.Models.V1_3_0.csproj --configuration Release --no-build --output package
           dotnet pack src/netex/Spillgebees.NeTEx.Models.V1_3_1/Spillgebees.NeTEx.Models.V1_3_1.csproj --configuration Release --no-build --output package
+          dotnet pack src/netex/Spillgebees.NeTEx.Models.V2_0_0/Spillgebees.NeTEx.Models.V2_0_0.csproj --configuration Release --no-build --output package
           dotnet pack src/netex/Spillgebees.NeTEx.Models/Spillgebees.NeTEx.Models.csproj --configuration Release --no-build --output package
           dotnet pack src/siri/Spillgebees.SIRI.Models.V2_1/Spillgebees.SIRI.Models.V2_1.csproj --configuration Release --no-build --output package
           dotnet pack src/siri/Spillgebees.SIRI.Models.V2_2/Spillgebees.SIRI.Models.V2_2.csproj --configuration Release --no-build --output package

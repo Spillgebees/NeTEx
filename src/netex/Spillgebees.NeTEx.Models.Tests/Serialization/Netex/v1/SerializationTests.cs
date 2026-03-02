@@ -2,9 +2,9 @@ using System.Xml.Serialization;
 using AwesomeAssertions;
 using Spillgebees.NeTEx.Models.V1_3_1.NeTEx;
 
-namespace Spillgebees.NeTEx.Models.Tests.Serialization;
+namespace Spillgebees.NeTEx.Models.Tests.Serialization.Netex.v1;
 
-public class NetexSerializationTests
+public class SerializationTests
 {
     [Test]
     public void Should_serialize_and_deserialize_multilingual_string()

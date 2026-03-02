@@ -15,6 +15,9 @@ using V1_3_0_GML = Spillgebees.NeTEx.Models.V1_3_0.GML;
 using V1_3_1_NeTEx = Spillgebees.NeTEx.Models.V1_3_1.NeTEx;
 using V1_3_1_SIRI = Spillgebees.NeTEx.Models.V1_3_1.SIRI;
 using V1_3_1_GML = Spillgebees.NeTEx.Models.V1_3_1.GML;
+using V2_0_0_NeTEx = Spillgebees.NeTEx.Models.V2_0_0.NeTEx;
+using V2_0_0_SIRI = Spillgebees.NeTEx.Models.V2_0_0.SIRI;
+using V2_0_0_GML = Spillgebees.NeTEx.Models.V2_0_0.GML;
 
 namespace Spillgebees.NeTEx.Models.Tests.Smoke;
 
@@ -151,6 +154,32 @@ public class VersionSmokeTests
         GetXmlTypeNamespace(typeof(V1_3_1_SIRI.LocationStructure))
             .Should().Be("http://www.siri.org.uk/siri");
         GetXmlTypeNamespace(typeof(V1_3_1_GML.DirectPositionType))
+            .Should().Be("http://www.opengis.net/gml/3.2");
+    }
+
+    [Test]
+    public void Should_have_core_netex_types_for_v2_0_0()
+    {
+        // assert
+        typeof(V2_0_0_NeTEx.PublicationDeliveryStructure).IsClass.Should().BeTrue();
+        typeof(V2_0_0_NeTEx.StopPlace).IsClass.Should().BeTrue();
+        typeof(V2_0_0_NeTEx.Line).IsClass.Should().BeTrue();
+        typeof(V2_0_0_NeTEx.MultilingualString).IsClass.Should().BeTrue();
+
+        GetXmlTypeNamespace(typeof(V2_0_0_NeTEx.StopPlace))
+            .Should().Be("http://www.netex.org.uk/netex");
+    }
+
+    [Test]
+    public void Should_have_siri_and_gml_types_for_v2_0_0()
+    {
+        // assert
+        typeof(V2_0_0_SIRI.LocationStructure).IsClass.Should().BeTrue();
+        typeof(V2_0_0_GML.DirectPositionType).IsClass.Should().BeTrue();
+
+        GetXmlTypeNamespace(typeof(V2_0_0_SIRI.LocationStructure))
+            .Should().Be("http://www.siri.org.uk/siri");
+        GetXmlTypeNamespace(typeof(V2_0_0_GML.DirectPositionType))
             .Should().Be("http://www.opengis.net/gml/3.2");
     }
 

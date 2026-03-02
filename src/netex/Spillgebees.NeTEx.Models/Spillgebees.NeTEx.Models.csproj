@@ -12,5 +12,6 @@
     <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_2_3/Spillgebees.NeTEx.Models.V1_2_3.csproj" />
     <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_3_0/Spillgebees.NeTEx.Models.V1_3_0.csproj" />
     <ProjectReference Include="../Spillgebees.NeTEx.Models.V1_3_1/Spillgebees.NeTEx.Models.V1_3_1.csproj" />
+    <ProjectReference Include="../Spillgebees.NeTEx.Models.V2_0_0/Spillgebees.NeTEx.Models.V2_0_0.csproj" />
   </ItemGroup>
 </Project>
